@@ -2,4 +2,8 @@
     <string name="app_name">SampleApp</string>
     <string name="hello_world">Hello World!</string>
     <string name="android_logo">Android Logo</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="name_age_is_male">\nName: %1$s\nAge: %2$s yo\nSex: %3s</string>
+    <string name="go_to_mainactivity2">Go to MainActivity2</string>
 </resources>
