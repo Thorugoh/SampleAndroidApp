@@ -12,10 +12,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="24dp"
+        android:fontFamily="@font/poppins"
+        android:textStyle="bold"
+        android:textColor="@color/light_blue"
         android:text="@string/hello_world"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivAndroidLogo" />
 
@@ -33,11 +37,12 @@
     <Button
         android:id="@+id/btnGoToMainActivity2"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/ivAndroidLogo"
+        android:layout_height="48dp"
+        app:layout_constraintTop_toBottomOf="@id/tvHelloWorld"
         app:layout_constraintBottom_toTopOf="@id/flMainContainer"
         android:text="@string/go_to_mainactivity2"
-        android:layout_marginHorizontal="24dp" />
+        android:layout_marginHorizontal="24dp"/>
+
 
     <FrameLayout
         android:id="@+id/flMainContainer"
@@ -45,7 +50,7 @@
         android:layout_margin="24dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvHelloWorld"
+        app:layout_constraintTop_toBottomOf="@+id/btnGoToMainActivity2"
         tools:layout_editor_absoluteX="0dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

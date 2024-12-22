@@ -1,14 +1,23 @@
 package com.dev.thorugoh.sampleapp.ui
 
+import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.dev.thorugoh.sampleapp.R
@@ -21,11 +30,20 @@ class MainActivity : AppCompatActivity() {
     private val lowBatteryBroadcastReceiver = LowBatteryBroadcastReceiver()
     private val lowBatteryIntentFilter = IntentFilter("android.intent.action.BATTERY_LOW")
 
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                Log.d("MainActivity", "Permission granted")
+            } else {
+                Log.d("MainActivity", "Permission denied")
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-       showToast(this)
+        showToast(this)
 
 //        val url = "https://www.google.com"
 //        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
@@ -73,23 +91,64 @@ class MainActivity : AppCompatActivity() {
             this?.textAlignment = TextView.TEXT_ALIGNMENT_CENTER
         }
 
-        binding.btnGoToMainActivity2?.setOnClickListener {
-            startActivity(Intent(this, MainActivity2::class.java))
+        fun showGoToMainActivity2Notification() {
+            if (ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+            ) {
+                Toast.makeText(this, "Permission not granted", Toast.LENGTH_SHORT).show()
+                return
+            }
+
+            val intentGoToMainActivity2 = Intent(this, MainActivity2::class.java)
+            val pendingIntentGoToMainActivity2 = PendingIntent.getActivity(
+                this,
+                0,
+                intentGoToMainActivity2,
+                PendingIntent.FLAG_IMMUTABLE
+            )
+
+            val notification = NotificationCompat.Builder(this.applicationContext, "channel_id")
+                .setContentTitle("Notification")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentText("Touch to open MainActivity2")
+                .setSmallIcon(android.R.drawable.ic_notification_overlay)
+                .setContentIntent(pendingIntentGoToMainActivity2)
+
+            val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val channel = NotificationChannel(
+                    "channel_id",
+                    "Go to activity 2 channel",
+                    NotificationManager.IMPORTANCE_DEFAULT
+                )
+                manager.createNotificationChannel(channel)
+            }
+
+            manager.notify(1, notification.build())
         }
 
-        registerReceiver(lowBatteryBroadcastReceiver, lowBatteryIntentFilter)
-        val intent = Intent(this, SyncDataService::class.java)
-        startService(intent)
-    }
+            binding.btnGoToMainActivity2?.setOnClickListener {
+                showGoToMainActivity2Notification()
+//            startActivity(Intent(ACTION_VIEW, Uri.parse("https://www.google.com")))
+//            startActivity(Intent(this, MainActivity2::class.java))
+            }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        unregisterReceiver(lowBatteryBroadcastReceiver)
-        Log.d("MainActivity", "onDestroy")
-    }
 
-    fun showToast(context:Context) {
-        Toast.makeText(context, "Hello World!", Toast.LENGTH_SHORT).show()
-    }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
 
-}
+        override fun onDestroy() {
+            super.onDestroy()
+            unregisterReceiver(lowBatteryBroadcastReceiver)
+            Log.d("MainActivity", "onDestroy")
+        }
+
+        fun showToast(context: Context) {
+            Toast.makeText(context, "Hello World!", Toast.LENGTH_SHORT).show()
+        }
+
+    }
