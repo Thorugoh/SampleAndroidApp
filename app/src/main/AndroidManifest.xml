@@ -13,6 +13,8 @@
         android:theme="@style/Theme.SampleApp"
         tools:targetApi="31">
 
+        <service android:name=".services.SyncDataService"
+            android:foregroundServiceType="dataSync" />
         <receiver
             android:name=".broadcastreceiver.LowBatteryBroadcastReceiver"
             android:exported="false">
@@ -22,10 +24,10 @@
         </receiver>
 
         <activity
-            android:name=".MainActivity2"
+            android:name=".ui.MainActivity2"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

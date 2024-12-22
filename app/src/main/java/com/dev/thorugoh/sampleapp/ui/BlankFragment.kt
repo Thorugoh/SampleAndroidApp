@@ -1,12 +1,12 @@
-package com.dev.thorugoh.sampleapp
+package com.dev.thorugoh.sampleapp.ui
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
+import com.dev.thorugoh.sampleapp.R
 import com.dev.thorugoh.sampleapp.databinding.FragmentBlankBinding
 
 // TODO: Rename parameter arguments, choose names that match

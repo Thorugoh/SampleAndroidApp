@@ -1,4 +1,4 @@
-package com.dev.thorugoh.sampleapp
+package com.dev.thorugoh.sampleapp.ui
 
 import android.content.Context
 import java.lang.ref.WeakReference
